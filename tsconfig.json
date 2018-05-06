@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "outDir": "./bin",
+    "target": "es6",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "sourceMap": false,
+    "typeRoots": ["node_modules/@types"]
+  },
+  "include": ["./cli/**/*", "./lib/**/*"],
+  "exclude": ["node_modules"]
+}
