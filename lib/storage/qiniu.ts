@@ -1,11 +1,5 @@
 import * as qiniu from 'qiniu'
-import { initFoldre } from '../utils'
-
-interface ImageInfo {
-  path: string
-  mime: string
-  name: string
-}
+import { initDotFolder } from '../util'
 
 let ACCESS_KEY, SECRET_KEY, BUCKET, PUBLIC_DOMAIN
 

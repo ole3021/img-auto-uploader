@@ -9,18 +9,18 @@ import { init as initQiniu, upload } from '../lib/storage/qiniu'
 const packageObj = require('../package')
 
 import {
-  fetchMimeType,
-  generateStruct,
-  initFoldre,
+  getMimeType,
+  initImageInfos,
+  initDotFolder,
   tempPath,
-  loadConfg
-} from '../lib/utils'
+  loadConfig
+} from '../lib/util'
 import { initFiles, initConfig } from './options'
 
 const [, , ...args] = process.argv
 
-initFoldre()
-const config = loadConfg()
+initDotFolder()
+const config = loadConfig()
 
 initTinyPNG(config)
 initQiniu(config)
@@ -48,7 +48,7 @@ prog
     // args and options are objects
     initFiles()
       .then(filePaths => {
-        return autoUploadFiles(generateStruct(filePaths))
+        return autoUploadFiles(initImageInfos(filePaths))
       })
       .then(result => {
         result.forEach(item => {

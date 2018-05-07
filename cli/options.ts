@@ -5,7 +5,7 @@ import { info, warn, error, success, fatal } from 'consola'
 import * as inquirer from 'inquirer'
 import * as autoComplete from 'inquirer-autocomplete-prompt'
 
-import { loadConfg, saveConfg, loadFiles, convertToPath } from '../lib/utils'
+import { loadConfig, saveConfig, loadFiles, convertToPath } from '../lib/util'
 
 inquirer.registerPrompt('autocomplete', autoComplete)
 
@@ -79,7 +79,7 @@ export const initConfig = () => {
         })
         .then(res => {
           if (res.toInit) {
-            saveConfg(JSON.stringify(config))
+            saveConfig(JSON.stringify(config))
             success('Config init successfully.')
           } else {
             fatal('Abort init config.')
