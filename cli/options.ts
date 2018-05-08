@@ -5,11 +5,11 @@ import { info, warn, error, success, fatal } from 'consola'
 import * as inquirer from 'inquirer'
 import * as autoComplete from 'inquirer-autocomplete-prompt'
 
-import { loadConfg, saveConfg, loadFiles, convertToPath } from '../lib/utils'
+import { loadConfig, saveConfig, loadFiles, convertToPath } from './utils'
 
 inquirer.registerPrompt('autocomplete', autoComplete)
 
-export const initFiles = () => {
+export const selectFiles = () => {
   let filePath
   return inquirer
     .prompt([
@@ -79,7 +79,7 @@ export const initConfig = () => {
         })
         .then(res => {
           if (res.toInit) {
-            saveConfg(JSON.stringify(config))
+            saveConfig(config)
             success('Config init successfully.')
           } else {
             fatal('Abort init config.')

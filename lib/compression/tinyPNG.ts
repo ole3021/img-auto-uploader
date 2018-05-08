@@ -1,18 +1,12 @@
 import * as tinify from 'tinify'
 
-export const init = ({ tinyPNG }) => {
+interface TinyConfig {
+  KEY: string
+}
+
+export const init = (tinyPNG: TinyConfig) => {
   tinify.key = tinyPNG.KEY
 }
 
-export const tiniFile = async (
-  source: string,
-  target: string
-): Promise<Boolean> => {
-  try {
-    await tinify.fromFile(source).toFile(target)
-    return true
-  } catch (err) {
-    console.log('>>> err', err)
-    return false
-  }
-}
+export const tinyFile = (source: string, target: string): Promise<void> =>
+  tinify.fromFile(source).toFile(target)

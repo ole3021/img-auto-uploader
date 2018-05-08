@@ -4,62 +4,36 @@ import { info, warn, error, success, fatal } from 'consola'
 import * as path from 'path'
 import * as prog from 'caporal'
 
-import { init as initTinyPNG, tiniFile } from '../lib/compression/tinyPNG'
-import { init as initQiniu, upload } from '../lib/storage/qiniu'
 const packageObj = require('../package')
 
-import {
-  fetchMimeType,
-  generateStruct,
-  initFoldre,
-  tempPath,
-  loadConfg
-} from '../lib/utils'
-import { initFiles, initConfig } from './options'
+import { initImageInfo, initServices, processImages } from '../lib'
+
+import { initDotFolder, tempPath, loadConfig } from './utils'
+import { selectFiles, initConfig } from './options'
 
 const [, , ...args] = process.argv
 
-initFoldre()
-const config = loadConfg()
-
-initTinyPNG(config)
-initQiniu(config)
-
-const autoUploadFiles = localImages => {
-  const uploadPromises = localImages.map(image =>
-    tiniFile(image.localpath, path.join(tempPath, image.fileName))
-      .then(() => upload(image.localpath, image.name))
-      .catch(err => err)
-  )
-
-  return Promise.all(uploadPromises).then(urls => {
-    const results = localImages.map((imageInfo, index) => ({
-      info: imageInfo,
-      url: urls[index],
-      md: `![${imageInfo.name}](${urls[index]})`
-    }))
-    return results
-  })
-}
+initDotFolder()
+const config = loadConfig()
 
 prog
   .version(packageObj.version)
-  .action((args, options, logger) => {
-    // args and options are objects
-    initFiles()
-      .then(filePaths => {
-        return autoUploadFiles(generateStruct(filePaths))
+  .action(async (args, options, logger) => {
+    try {
+      initServices(config)
+      const filePaths = await selectFiles()
+      const results = await processImages(initImageInfo(filePaths))
+
+      return results.forEach(item => {
+        success(`Upload ${item.image.fileName} complete: ${item.md}`)
       })
-      .then(result => {
-        result.forEach(item => {
-          success(`Upload ${item.info.fileName} complete: ${item.url}`)
-        })
-      })
-      .catch(err => error)
+    } catch (err) {
+      error('Fail to upload image', err)
+    }
   })
   .command('config', 'Config the auto uploader')
-  .action((args, options, logger) => {
-    initConfig()
+  .action(async (args, options, logger) => {
+    await initConfig()
   })
 
 prog.parse(process.argv)

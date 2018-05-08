@@ -1,4 +1,4 @@
-import { fetchMimeType, getFileName } from '../../lib/utils'
+import { getMimeType, getFileName } from '../../lib/util'
 
 test('Should return file mime types', () => {
   const filePaths = [
@@ -8,7 +8,7 @@ test('Should return file mime types', () => {
     './test/filename4.jpeg'
   ]
 
-  const types = filePaths.map(path => fetchMimeType(path))
+  const types = filePaths.map(path => getMimeType(path))
 
   expect(types[0]).toBe('image/png')
   expect(types[1]).toBe('image/png')
