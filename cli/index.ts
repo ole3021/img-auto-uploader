@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 
 import { info, warn, error, success, fatal } from 'consola'
-import * as path from 'path'
 import * as prog from 'caporal'
 
 const packageObj = require('../package')
 
 import { initImageInfo, initServices, processImages } from '../lib'
 
-import { initDotFolder, tempPath, loadConfig } from './utils'
+import { initDotFolder, loadConfig } from './utils'
 import { selectFiles, initConfig } from './options'
 
 const [, , ...args] = process.argv
@@ -32,8 +31,6 @@ prog
     }
   })
   .command('config', 'Config the auto uploader')
-  .action(async (args, options, logger) => {
-    await initConfig()
-  })
+  .action(() => initConfig())
 
 prog.parse(process.argv)
