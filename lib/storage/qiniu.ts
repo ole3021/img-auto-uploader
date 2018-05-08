@@ -1,16 +1,22 @@
 import * as qiniu from 'qiniu'
-import { initDotFolder } from '../util'
 
 let ACCESS_KEY, SECRET_KEY, BUCKET, PUBLIC_DOMAIN
 
-export const init = ({ qiniu }) => {
+interface QiniuConfig {
+  ACCESS_KEY: string
+  SECRET_KEY: string
+  BUCKET: string
+  DOMAIN: string
+}
+
+export const init = (qiniu: QiniuConfig) => {
   ;(ACCESS_KEY = qiniu.ACCESS_KEY),
     (SECRET_KEY = qiniu.SECRET_KEY),
     (BUCKET = qiniu.BUCKET),
     (PUBLIC_DOMAIN = qiniu.DOMAIN)
 }
 
-export const upload = (localPath, name) =>
+export const upload = (localPath: string, name: string): Promise<string> =>
   new Promise((resolve, reject) => {
     const mac = new qiniu.auth.digest.Mac(ACCESS_KEY, SECRET_KEY)
 
